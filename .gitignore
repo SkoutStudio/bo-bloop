@@ -1,0 +1,5 @@
+voices/
+episodes/*/build/
+episodes/*/out/
+__pycache__/
+*.wav
