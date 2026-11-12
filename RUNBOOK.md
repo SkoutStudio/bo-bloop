@@ -1,23 +1,25 @@
 # Bo & Bloop — weekly automated run
 
 This repo is the whole production system for the YouTube channel **Bo & Bloop** (English, kids 4-7, "Made for kids").
-Owner: Johnny (Skout Studio). A scheduled task runs this every **Monday around 03:00 (Europe/Athens)**.
-Each run makes **1 episode + 3 Shorts**, schedules them in Metricool, and notifies Johnny.
+Owner: Johnny (Skout Studio). A scheduled task runs this **Monday, Wednesday and Friday around 03:00 (Europe/Athens)**.
+Each run makes **1 episode + 3 Shorts** (so 3 episodes + 9 Shorts a week), schedules them in Metricool, and notifies Johnny.
 
-## Weekly calendar (all 15:00 Europe/Athens)
-| What | When |
-| --- | --- |
-| Episode N | Saturday of the run's week |
-| Short 1 of episode N | Monday after that Saturday |
-| Short 2 | Wednesday after |
-| Short 3 | Friday after |
+## Calendar (Europe/Athens). D = the day the run starts (after midnight)
+| Run day | Episode (15:00) | Short 1 | Short 2 | Short 3 |
+| --- | --- | --- | --- | --- |
+| Monday | Tuesday | Wednesday 12:00 | Thursday 19:00 | Friday 12:00 |
+| Wednesday | Thursday | Friday 19:00 | Saturday 12:00 | Sunday 19:00 |
+| Friday | Saturday | Sunday 12:00 | Monday 19:00 | Tuesday 12:00 |
 
-Example: run on Mon 9 Nov 2026 -> episode on Sat 14 Nov, Shorts on Mon 16, Wed 18, Fri 20 Nov.
+The 9 Shorts slots never collide. Example: run on Fri 13 Nov 2026 -> episode Sat 14 Nov 15:00, Shorts Sun 15 12:00,
+Mon 16 19:00, Tue 17 12:00. Before scheduling, `getScheduledPosts` for those days: if a Bo & Bloop YouTube post already
+sits in a slot (e.g. a manual run happened), do NOT double-book: stop and tell Johnny.
+If a run was missed, the next run only does its own slots (never schedule in the past).
 
 ## Steps for the run
 1. **Setup**: `bash setup.sh` (installs piper-tts, cairosvg, numpy, pillow; downloads voices into `voices/`). ffmpeg must exist.
 2. **Pick the episode**: first line with status `next` in `plan/episodes.md`. Its end card teases the following `queued` line.
-   If none is `next`, take the first `queued`. Write 4-6 new `queued` ideas when fewer than 4 remain (rotate the 5 series).
+   If none is `next`, take the first `queued`. Write 6-9 new `queued` ideas when fewer than 6 remain (rotate the 5 series; never repeat a lesson already in the table).
 3. **Make the folder**: copy the closest previous episode folder (`episodes/epNN`) to the new number. Counting episodes start
    from ep02 (starfish + coral bed), others from the nearest match.
 4. **Script** (`script.py`): same 7-part structure (hook question -> jingle -> problem/mistake by Bo -> trying together with
@@ -53,4 +55,4 @@ Example: run on Mon 9 Nov 2026 -> episode on Sat 14 Nov, Shorts on Mon 16, Wed 1
 ## Rules
 - Never publish anything that is not a Bo & Bloop episode/Short made in this run. Never touch other brands or channels.
 - If a step fails and can't be fixed, do not schedule half a week: tell Johnny what failed.
-- Keep the repo small: delete `media/` folders of episodes whose posts are all already published (older than 3 weeks).
+- Keep the repo small: delete `media/` folders of episodes whose posts are all already published (older than 2 weeks).
