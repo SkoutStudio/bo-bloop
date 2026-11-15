@@ -38,4 +38,4 @@ Bo & Bloop is a learning cartoon for kids aged 4-7, made in Bubble Bay. New epis
 | ep04_short3_grumpy_song.mp4 | The Grumpy Feelings Song for Kids #shorts | Sing along with Bo & Bloop! When I'm grumpy: name it, breathe, and ask for help. A feelings song for kids. #shorts #kidssongs #preschool | Fri 20/11 12:00 |
 
 Episode slot: Tue 17/11 15:00 (Europe/Athens).
-Not scheduled in Metricool (owner asked to stop using Metricool, 16 Nov 2026): upload manually.
+Scheduled via GitHub Actions (tools/queue_for_youtube.py -> branch publish-queue), not Metricool.

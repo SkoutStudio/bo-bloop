@@ -2,7 +2,7 @@
 
 This repo is the whole production system for the YouTube channel **Bo & Bloop** (English, kids 4-7, "Made for kids").
 Owner: Johnny (Skout Studio). A scheduled task runs this **Monday, Wednesday and Friday around 03:00 (Europe/Athens)**.
-Each run makes **1 episode + 3 Shorts** (so 3 episodes + 9 Shorts a week), schedules them in Metricool, and notifies Johnny.
+Each run makes **1 episode + 3 Shorts** (so 3 episodes + 9 Shorts a week), schedules them on YouTube (GitHub Actions), and notifies Johnny.
 
 ## Calendar (Europe/Athens). D = the day the run starts (after midnight)
 | Run day | Episode (15:00) | Short 1 | Short 2 | Short 3 |
@@ -12,7 +12,7 @@ Each run makes **1 episode + 3 Shorts** (so 3 episodes + 9 Shorts a week), sched
 | Friday | Saturday | Sunday 12:00 | Monday 19:00 | Tuesday 12:00 |
 
 The 9 Shorts slots never collide. Example: run on Fri 13 Nov 2026 -> episode Sat 14 Nov 15:00, Shorts Sun 15 12:00,
-Mon 16 19:00, Tue 17 12:00. Before scheduling, `getScheduledPosts` for those days: if a Bo & Bloop YouTube post already
+Mon 16 19:00, Tue 17 12:00. Before scheduling, check the publish queue for those days: if a Bo & Bloop YouTube post already
 sits in a slot (e.g. a manual run happened), do NOT double-book: stop and tell Johnny.
 If a run was missed, the next run only does its own slots (never schedule in the past).
 
@@ -39,16 +39,20 @@ If a run was missed, the next run only does its own slots (never schedule in the
 11. **Publish media**: copy the mp4s + thumbnail png to `media/epNN/`, update `plan/episodes.md` (status `done`, dates),
     commit and push to `main` of SkoutStudio/bo-bloop. Public URLs:
     `https://raw.githubusercontent.com/SkoutStudio/bo-bloop/main/media/epNN/<file>`
-    Before scheduling, `curl -sI` each URL and make sure it answers 200.
-    If Metricool rejects the raw URL, use the jsDelivr mirror instead (files under 20 MB):
-    `https://cdn.jsdelivr.net/gh/SkoutStudio/bo-bloop@main/media/epNN/<file>`
-12. **Schedule in Metricool** (connector, brand blogId from getBrandSettings, YouTube only), one post per video:
-    - `providers: [{"network":"youtube"}]`, `autoPublish: true`, `publicationDate` in Europe/Athens
-    - `youtubeData`: `title`, `type` ("video" or "short"), `privacy: "public"`, `tags`, `category: "EDUCATION"`,
-      `madeForKids: true`, `isAiGeneratedContent: true`
-    - `text` = description (from `upload.md`), `media` = [raw URL]
-    - episode: `videoThumbnailUrl` = thumbnail raw URL; if rejected with VIDEO_THUMBNAIL_NOT_APPLICABLE, retry without it.
-    - Then `getScheduledPosts` for that range and confirm all 4 are there.
+12. **Schedule on YouTube via GitHub Actions** (same system as SkoutStudio/curious-engine; Metricool is no longer used):
+    - Write `episodes/epNN/upload/manifest.json` (format in `tools/youtube_publish.py`): `channel_id`
+      `UCgzl9soaKTl3XNG_8ZDnVwQ`, episode + 3 Shorts, each with title, description (from `upload.md`), tags,
+      `publish_at` with the Athens offset (`+02:00` winter / `+03:00` summer), `category_id` "27" (Education),
+      `language` "en", `made_for_kids: true`, `synthetic_media: true`; the episode also gets `thumbnail`.
+      `file`/`thumbnail` paths are relative to the manifest folder (e.g. `../../../media/epNN/<file>`).
+    - Before queueing, check `publish-queue` for a `queue/epNN*` folder or another queued Bo & Bloop item in the same
+      slots: if one exists, do NOT double-book, stop and tell Johnny.
+    - `python3 tools/queue_for_youtube.py epNN episodes/epNN/upload/manifest.json --push` pushes to branch
+      `publish-queue`; the "YouTube publish" workflow uploads everything as private + scheduled (`publishAt`) and
+      writes `queue/epNN/done.json` with the video links. Check it after ~5-15 min with
+      `git fetch --depth 1 origin publish-queue && git show origin/publish-queue:queue/epNN/done.json`.
+    - Never upload without `publish_at` (videos without it stay private). Secrets needed in this repo:
+      `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN_BO_BLOOP` (see curious-engine `SETUP_GR.md`).
 13. **Notify Johnny** (in Greek, short): what was made, the dates, and send the episode mp4 + thumbnail with SendUserFile.
     He can delete any post from Metricool before it goes live.
 

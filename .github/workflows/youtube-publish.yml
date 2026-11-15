@@ -1,0 +1,90 @@
+name: YouTube publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "check_auth = test the connection · upload = upload everything pending in queue/"
+        type: choice
+        options: [check_auth, upload]
+        default: check_auth
+      channel:
+        description: "Channel key (secret YT_REFRESH_TOKEN_<KEY>)"
+        default: BO_BLOOP
+  # main: pushing the publisher code runs the connection check automatically.
+  # publish-queue: pushing a new queue/<slug>/manifest.json uploads it.
+  push:
+    branches: [main, publish-queue]
+    paths:
+      - ".github/workflows/youtube-publish.yml"
+      - "tools/youtube_publish.py"
+      - "queue/**/manifest.json"
+
+concurrency:
+  group: youtube-publish
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CHANNEL: ${{ inputs.channel || 'BO_BLOOP' }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - run: pip install -q google-api-python-client google-auth
+
+      - name: Decide mode
+        id: mode
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then m="${{ inputs.mode }}";
+          elif [ "${{ github.ref_name }}" = "publish-queue" ]; then m=upload;
+          else m=check_auth; fi
+          echo "mode=$m" >> "$GITHUB_OUTPUT"; echo "Mode: $m"
+
+      - name: Check connection
+        if: steps.mode.outputs.mode == 'check_auth'
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets[format('YT_REFRESH_TOKEN_{0}', env.CHANNEL)] }}
+          YT_EXPECTED_CHANNEL_ID: ${{ env.CHANNEL == 'BO_BLOOP' && 'UCgzl9soaKTl3XNG_8ZDnVwQ' || '' }}
+        run: python tools/youtube_publish.py check_auth
+
+      - name: Upload pending videos
+        if: steps.mode.outputs.mode == 'upload'
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets[format('YT_REFRESH_TOKEN_{0}', env.CHANNEL)] }}
+          YT_EXPECTED_CHANNEL_ID: ${{ env.CHANNEL == 'BO_BLOOP' && 'UCgzl9soaKTl3XNG_8ZDnVwQ' || '' }}
+        run: |
+          shopt -s nullglob
+          dirs=()
+          for m in queue/*/manifest.json; do d=$(dirname "$m"); [ -f "$d/done.json" ] || dirs+=("$d"); done
+          if [ ${#dirs[@]} -eq 0 ]; then echo "Nothing pending in queue/"; exit 0; fi
+          python tools/youtube_publish.py upload "${dirs[@]}"
+
+      - name: Record results and remove uploaded video files
+        if: always() && steps.mode.outputs.mode == 'upload'
+        run: |
+          shopt -s nullglob
+          changed=0
+          for d in queue/*/; do
+            if [ -f "$d/done.json" ] && ls "$d"/*.mp4* >/dev/null 2>&1; then
+              git rm -q --cached "$d"/*.mp4* 2>/dev/null || true; rm -f "$d"/*.mp4*; changed=1
+            fi
+            [ -f "$d/done.json" ] && git add "$d/done.json" && changed=1
+          done
+          if [ $changed = 1 ] && ! git diff --cached --quiet; then
+            git config user.name "youtube-publisher"; git config user.email "actions@users.noreply.github.com"
+            git commit -qm "YouTube publish results [skip ci]" && git push
+          fi
