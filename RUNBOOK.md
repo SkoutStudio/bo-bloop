@@ -52,7 +52,7 @@ If a run was missed, the next run only does its own slots (never schedule in the
       writes `queue/epNN/done.json` with the video links. Check it after ~5-15 min with
       `git fetch --depth 1 origin publish-queue && git show origin/publish-queue:queue/epNN/done.json`.
     - Never upload without `publish_at` (videos without it stay private). Secrets needed in this repo:
-      `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN_BO_BLOOP` (see curious-engine `SETUP_GR.md`).
+      `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN_BO_BLOOP` (step-by-step in `SETUP_GR.md`; token via `tools/get_refresh_token.py`).
 13. **Notify Johnny** (in Greek, short): what was made, the dates, and send the episode mp4 + thumbnail with SendUserFile.
     He can delete or change any scheduled video in YouTube Studio before it goes live.
 
