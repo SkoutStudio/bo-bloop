@@ -40,4 +40,4 @@ Bo & Bloop is a learning cartoon for kids aged 4-7, made in Bubble Bay. New epis
 | ep05_short3_float_song.mp4 | The Float or Sink Song for Kids #shorts | Sing along with Bo & Bloop! Full of air, it floats up there. Heavy and solid goes down, down, down! #shorts #kidssongs #preschool | Sun 22/11 19:00 |
 
 Episode slot: Fri 20/11 15:00 (Europe/Athens) — catch-up run (original Wed-run slots had passed).
-Scheduled via GitHub Actions (tools/queue_for_youtube.py -> branch publish-queue), not Metricool.
+Scheduled via Metricool (brand 7784568, YouTube only), post ids 434543106 / 434543224 / 434543273 / 434543333. The GitHub Actions publisher failed: repo secrets YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN_BO_BLOOP are missing.
