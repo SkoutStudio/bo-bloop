@@ -10,8 +10,8 @@ Series: **Count with Bo** (numbers) · **Shape Reef** (shapes, colors, sizes) ·
 | 03 | Shape Reef | Circle Rocks & Square Rocks | Circles roll, squares have 4 sides and 4 corners; sorting by shape | done | 2026-11-13 17:00 | 2026-11-14 12:00 / 11-15 19:00 / 11-16 12:00 |
 | 04 | Bloop's Big Feelings | When Bo Feels Grumpy | Name the feeling, take 3 slow breaths, ask for help | done | 2026-11-17 15:00 | 2026-11-18 12:00 / 11-19 19:00 / 11-20 12:00 |
 | 05 | Why, Bo? | Why Do Things Float? | Light/air-filled things float, heavy/solid things sink; test and see | done | 2026-11-20 15:00 | 2026-11-20 19:00 / 11-21 12:00 / 11-22 19:00 |
-| 06 | Bubble Bay Songs | Days of the Week with Bo | The 7 days in order | next | | |
-| 07 | Count with Bo | Bo's Missing Bolt | Counting backwards 10 to 1 | queued | | |
+| 06 | Bubble Bay Songs | Days of the Week with Bo | The 7 days in order | ready (made 21/11, NOT scheduled: Metricool limit + GitHub secrets missing) | | |
+| 07 | Count with Bo | Bo's Missing Bolt | Counting backwards 10 to 1 | next | | |
 | 08 | Shape Reef | The Rainbow Coral | Colors and mixing two colors | queued | | |
 | 09 | Bloop's Big Feelings | Taking Turns on the Slide | Waiting and taking turns is fair and fun | queued | | |
 | 10 | Why, Bo? | Where Does Rain Come From? | Water goes up as vapor, makes clouds, falls as rain | queued | | |
