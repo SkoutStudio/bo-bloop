@@ -38,4 +38,4 @@ Bo & Bloop is a learning cartoon for kids aged 4-7, made in Bubble Bay. New epis
 | ep06_short2_what_comes_next.mp4 | What Comes After Monday? Days of the Week Game #shorts | What comes after Monday? Guess with Bo & Bloop and put the days of the week in order! #shorts #daysoftheweek #preschool | Tue 24/11 12:00 |
 | ep06_short3_days_song.mp4 | The Days of the Week Song for Kids #shorts | Sing along with Bo & Bloop! Monday, Tuesday, Wednesday, Thursday, Friday, Saturday and Sunday! #shorts #kidssongs #preschool | Wed 25/11 19:00 |
 
-Planned slots (NOT scheduled yet): episode Sun 22/11 15:00, Shorts Mon 23/11 19:00, Tue 24/11 12:00, Wed 25/11 19:00. Not scheduled because the Metricool account hit its post limit (ep05 Short 2 failed on 21/11) and the GitHub publisher secrets are still missing. If these dates pass, update publish_at in upload/manifest.json before queueing.
+Scheduled in Metricool (created 23/11 00:22): episode Mon 23/11 15:00, Shorts Mon 23/11 19:00, Tue 24/11 12:00, Wed 25/11 19:00.
