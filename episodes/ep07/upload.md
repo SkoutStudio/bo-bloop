@@ -38,4 +38,4 @@ Bo & Bloop is a learning cartoon for kids aged 4-7, made in Bubble Bay. New epis
 | ep07_short2_countdown.mp4 | Count Down from 10 with Bo! Blast Off! #shorts | Ten, nine, eight... count down with Bo & Bloop and blast off the Bubble Rocket! #shorts #countingforkids #preschool | Thu 26/11 19:00 |
 | ep07_short3_countdown_song.mp4 | The Countdown Song for Kids: 10 to 1 #shorts | Sing along with Bo & Bloop! Ten, nine, eight, seven, six, five, four, three, two, one... blast off! #shorts #kidssongs #preschool | Fri 27/11 12:00 |
 
-Episode slot: Tue 24/11 15:00 (Europe/Athens), Monday run. Scheduled via Metricool.
+Episode slot: Tue 24/11 15:00 (Europe/Athens), Monday run. Scheduled via Metricool, post ids 438143085 / 438143119 / 438143170 / 438143226.
